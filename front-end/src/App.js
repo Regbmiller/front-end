@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 
-function App() {
+import { Route, Link } from "react-router-dom";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+
+import Home from "./components/Home";
+import StuDash from "./components/Dashboards/StuDash";
+
+import { fetchCategories } from "./actions/categories";
+
+import "./App.css";
+
+function App(props) {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Route exact path="/" component={Home} />
+      <ProtectedRoute exact path="/student" component={StuDash} />
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    categories: state.categories
+  };
+};
+
+const mapDispatchToProps = {
+   fetchCategories
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
